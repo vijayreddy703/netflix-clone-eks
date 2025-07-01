@@ -24,7 +24,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
-          scan-ref: '.'
+          scan-ref: './Netflix-clone'
           format: 'table'
           output: 'trivy-results.txt'
       - name: Upload Trivy scan results
