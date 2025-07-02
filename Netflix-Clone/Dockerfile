@@ -5,7 +5,8 @@ COPY ./yarn.lock .
 RUN yarn install
 ARG VITE_TMDB_API_KEY
 ENV VITE_TMDB_API_KEY=$VITE_TMDB_API_KEY
-RUN yarn build --ignore-scripts
+
+RUN yarn build 
 
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
