@@ -1,4 +1,4 @@
-name: code scan and build docker image
+name: netflix-clone-workflow
 on:
   push:
     branches:
@@ -6,8 +6,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
-  sonarqube:
-    name: SonarQube
+  code_quality_analysis:
+    name: Code Quality Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,6 +18,11 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - name: build docker image
         run: |
           docker build \
