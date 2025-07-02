@@ -1,5 +1,8 @@
-FROM node:16.17.0-alpine as builder
+FROM node:16.17.0-alpine AS builder
 WORKDIR /app
+# Upgrade system packages
+RUN apk update && apk upgrade
+
 COPY ./package.json .
 COPY ./yarn.lock .
 RUN yarn install
