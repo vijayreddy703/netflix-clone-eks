@@ -21,6 +21,7 @@ jobs:
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    needs: code_quality_analysis
     steps:
       - uses: actions/checkout@v4
       - name: build docker image
@@ -29,5 +30,17 @@ jobs:
             --build-arg TMDB_V3_API_KEY="${{ secrets.TMDB_V3_API_KEY }}" \
             -t netflix:latest \
             -f ./Netflix-Clone/Dockerfile ./Netflix-Clone
-       
+
+      - name: Trivy Image Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'netflix:latest'
+          format: 'table'
+          output: 'trivy-image-results.txt'
+
+      - name: Upload Trivy scan results
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-image-results
+          path: trivy-image-results.txt
 
