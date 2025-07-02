@@ -23,6 +23,6 @@ jobs:
           docker build \
             --build-arg VITE_TMDB_API_KEY=${{ secrets.VITE_TMDB_API_KEY }} \
             -t netflix:latest \
-            -f ./Netflix-Clone/src/Dockerfile ./Netflix-Clone/src
+            -f ./Netflix-Clone/Dockerfile ./Netflix-Clone
        
 
