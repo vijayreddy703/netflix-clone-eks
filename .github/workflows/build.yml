@@ -21,7 +21,7 @@ jobs:
       - name: build docker image
         run: |
           docker build \
-            --build-arg VITE_TMDB_API_KEY="${{ secrets.VITE_TMDB_API_KEY }}" \
+            --build-arg TMDB_V3_API_KEY="${{ secrets.TMDB_V3_API_KEY }}" \
             -t netflix:latest \
             -f ./Netflix-Clone/Dockerfile ./Netflix-Clone
        
