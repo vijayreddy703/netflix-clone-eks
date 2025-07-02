@@ -1,4 +1,4 @@
-name: Build
+name: code scan and build docker image
 on:
   push:
     branches:
@@ -17,3 +17,12 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: build docker image
+        run: |
+          docker build \
+            --build-arg VITE_TMDB_API_KEY=${{ secrets.VITE_TMDB_API_KEY }} \
+            -t your-image-name:latest \
+            -f ./Netflix-Clone/src/Dockerfile ./Netflix-Clone/src
+       
+

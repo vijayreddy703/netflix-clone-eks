@@ -2,10 +2,10 @@ FROM node:18.20.2-alpine AS builder
 WORKDIR /app
 COPY ./package.json .
 COPY ./yarn.lock .
-
 RUN yarn install
-COPY . .
-RUN yarn build
+ARG VITE_TMDB_API_KEY
+ENV VITE_TMDB_API_KEY=$VITE_TMDB_API_KEY
+RUN yarn build --ignore-scripts
 
 FROM nginx:stable-alpine
 WORKDIR /usr/share/nginx/html
