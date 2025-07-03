@@ -108,6 +108,6 @@ jobs:
           kubectl apply -f ./Netflix-Clone/k8-Manifest/service.yml
       - name: Wait for deployment to be ready
         run: |
-          kubectl rollout status deployment/netflix-clone-deployment --timeout=300s || exit 1
+          kubectl rollout status deployment/netflix-app --timeout=300s || exit 1
           kubectl get pods
     
