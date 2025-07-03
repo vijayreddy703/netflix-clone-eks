@@ -6,7 +6,7 @@ resource "aws_eks_cluster" "eks_cluster" {
     subnet_ids              = module.networking.public_subnets
     security_group_ids      = [aws_security_group.eks_cluster_sg.id, aws_security_group.eks_worker_sg.id]
     endpoint_private_access = true
-    endpoint_public_access  = false
+    endpoint_public_access  = true
   }
 
 
