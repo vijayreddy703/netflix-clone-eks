@@ -18,8 +18,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  build:
-    name: Build Docker Image
+  build_scan_docker_image:
+    name: Build Docker Image and scan with Trivy
     runs-on: ubuntu-latest
     needs: code_quality_analysis
     steps:
@@ -44,6 +44,26 @@ jobs:
           name: trivy-image-results
           path: trivy-image-results.txt
 
+      - name: Save Docker image as tar
+        run: docker save -o netflix-latest.tar netflix:latest
+
+      - name: Upload Docker image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: netflix-latest
+          path: netflix-latest.tar
+
+  push_docker_image:
+    runs-on: ubuntu-latest
+    needs: build_scan_docker_image
+    steps:
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: netflix-latest
+
+      - name: Load Docker image
+        run: docker load -i netflix-latest.tar
       - name: Push Docker Image to Docker Hub
         uses: docker/login-action@v2
         with:
