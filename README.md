@@ -1,78 +1,6 @@
 # 🚀 Building and Deploying a Netflix Clone on AWS EKS with GitHub Actions CI/CD
 
 In this blog post, I’ll walk you through how I built and deployed a full-stack **Netflix Clone** using modern DevOps best practices. The project integrates **GitHub Actions** for CI/CD, **SonarCloud** for code quality checks, **Trivy** for Docker image vulnerability scanning, **Docker Hub** for image storage, and **Terraform** for reusable AWS infrastructure — all deployed to a production-grade **AWS EKS cluster** with a managed node group.
-
----
-
-## 🧭 Step-by-Step Project Guide
-
-### 1️⃣ Clone the GitHub Repository
-
-```bash
-git clone https://github.com/your-username/netflix-clone-on-eks.git
-cd netflix-clone-on-eks
-```
-
-### 2️⃣ Configure GitHub Secrets
-
-In your GitHub repository, navigate to **Settings > Secrets and variables > Actions > New repository secret** and add the following:
-
-- `VITE_TMDB_API_KEY` — Your TMDB API key  
-- `DOCKER_USERNAME` — Your Docker Hub username  
-- `DOCKER_PASSWORD` — Your Docker Hub password or access token  
-- `SONAR_TOKEN` — Token from SonarCloud account  
-
-### 3️⃣ Deploy Infrastructure Using Terraform
-
-Navigate to the Terraform directory in the project:
-
-```bash
-cd infrastructure/terraform
-```
-Initialize Terraform:
-
-```bash
-terraform init
-```
-
-Preview the resources to be created:
-
-```bash
-terraform plan
-```
-
-Apply the configuration to provision AWS resources:
-
-```bash
-terraform apply
-```
-
-> ⚠️ This creates your VPC, EKS cluster, managed node group, IAM roles, etc.
-
-### 4️⃣ Update Your kubeconfig to Connect to EKS
-
-```bash
-aws eks update-kubeconfig --region <your-region> --name netflix-eks
-```
-
-### 5️⃣ Push Your Code to Trigger GitHub Actions
-
-Once infrastructure is ready and secrets are set, push your code:
-
-```bash
-git add .
-git commit -m "Initial commit with CI/CD pipeline"
-git push origin main
-```
-
-This triggers the GitHub Actions pipeline, which:
-
-- Analyzes code with **SonarCloud**
-- Builds Docker image with **VITE_TMDB_API_KEY**
-- Scans it using **Trivy**
-- Pushes it to **Docker Hub**
-- Deploys it to **AWS EKS**
-
 ---
 
 ## 🎬 Project Overview
@@ -91,24 +19,7 @@ The Netflix Clone is a React-based application that fetches and displays trendin
 
 ## 🗺️ Architecture Overview
 
-```
-[ GitHub Actions ]
-       |
-       v
-[ SonarCloud & Trivy ]
-       |
-       v
-[ Docker Image Built ]
-       |
-       v
-[ Docker Hub ]
-       |
-       v
-[ Terraform → AWS EKS ]
-       |
-       v
-[ Netflix Clone on Kubernetes ]
-```
+
 ---
 
 ## 🛠 CI/CD with GitHub Actions
@@ -405,11 +316,72 @@ spec:
     app: netflix-app
   
 ```
-
-
 ---
+## 🧭 Step-by-Step Project Guide
+
+### 1️⃣ Clone the GitHub Repository
+
+```bash
+git clone https://github.com/your-username/netflix-clone-on-eks.git
+cd netflix-clone-on-eks
+```
+
+### 2️⃣ Configure GitHub Secrets
+
+In your GitHub repository, navigate to **Settings > Secrets and variables > Actions > New repository secret** and add the following:
+
+- `VITE_TMDB_API_KEY` — Your TMDB API key  
+- `DOCKER_USERNAME` — Your Docker Hub username  
+- `DOCKER_PASSWORD` — Your Docker Hub password or access token  
+- `SONAR_TOKEN` — Token from SonarCloud account
+- `AWS_ACCESS_KEY_ID` — Your AWS Access key ID
+- `AWS_SECRET_ACCESS_KEY` — Your AWS Secret Access Key
+- `AWS_REGION` — AWS Region of deployment
+- `EKS_CLUSTER_NAME` — Your EKS Cluster Name
 
 
+### 3️⃣ Deploy Infrastructure Using Terraform
+
+Navigate to the Terraform directory in the project:
+
+```bash
+cd infrastructure/terraform
+```
+Initialize Terraform:
+
+```bash
+terraform init
+```
+
+Preview the resources to be created:
+
+```bash
+terraform plan
+```
+Apply the configuration to provision AWS resources:
+
+```bash
+terraform apply
+```
+
+> ⚠️ This creates your VPC, EKS cluster, managed node group, IAM roles, etc.
+
+### 4️⃣ Push Your Code to Trigger GitHub Actions
+
+Once infrastructure is ready and secrets are set, push your code:
+
+```bash
+git add .
+git commit -m "Initial commit with CI/CD pipeline"
+git push origin main
+```
+This triggers the GitHub Actions pipeline, which:
+
+- Analyzes code with **SonarCloud**
+- Builds Docker image with **VITE_TMDB_API_KEY**
+- Scans it using **Trivy**
+- Pushes it to **Docker Hub**
+- Deploys it to **AWS EKS**
 ---
 
 ## 🔚 Conclusion
