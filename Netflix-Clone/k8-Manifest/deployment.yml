@@ -19,3 +19,4 @@ spec:
         image: ojosamuel/netflix-clone:latest
         ports:
         - containerPort: 80
+  

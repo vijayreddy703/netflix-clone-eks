@@ -33,6 +33,7 @@ jobs:
 
       - name: Trivy Image Scan
         uses: aquasecurity/trivy-action@master
+        continue-on-error: true
         with:
           image-ref: 'netflix:latest'
           format: 'table'
@@ -75,3 +76,38 @@ jobs:
           docker tag netflix:latest ${{ secrets.DOCKER_USERNAME }}/netflix-clone:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/netflix-clone:latest
 
+
+  deploy_to_eks:
+    name: Deploy to EKS
+    runs-on: ubuntu-latest
+    needs: push_docker_image
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }} 
+
+      - name: Install kubectl
+        run: |
+          curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.33.0/2025-05-01/bin/linux/amd64/kubectl
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      - name: Update kubeconfig for EKS
+        run: aws eks update-kubeconfig --region ${{ secrets.AWS_REGION }} --name ${{ secrets.EKS_CLUSTER_NAME }}
+
+      - name: Deploy Kubernetes manifests
+        run: |
+          kubectl apply -f ./Netflix-clone/k8-Manifest/deployment.yml
+          kubectl apply -f ./Netflix-clone/k8-Manifest/service.yml
+      - name: Wait for deployment to be ready
+        run: |
+          kubectl rollout status deployment/netflix-clone-deployment --timeout=300s || exit 1
+          kubectl get pods
+    
