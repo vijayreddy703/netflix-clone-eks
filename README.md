@@ -19,8 +19,7 @@ The Netflix Clone is a React-based application that fetches and displays trendin
 
 ## 🗺️ Architecture Overview
 
-
----
+![Netflix Clone Architecture Diagram](https://i.imgur.com/7kaeaDL.png)
 
 ## ✅ Code Quality with SonarCloud
 
@@ -274,8 +273,8 @@ spec:
 ### 1️⃣ Clone the GitHub Repository
 
 ```bash
-git clone https://github.com/your-username/netflix-clone-on-eks.git
-cd netflix-clone-on-eks
+git clone https://github.com/OjoOluwagbenga700/Netflix-Clone--aws-eks.git
+cd Netflix-Clone--aws-eks
 ```
 
 ### 2️⃣ Configure GitHub Secrets
@@ -297,7 +296,7 @@ In your GitHub repository, navigate to **Settings > Secrets and variables > Acti
 Navigate to the Terraform directory in the project:
 
 ```bash
-cd infrastructure/terraform
+cd terraform
 ```
 Initialize Terraform:
 
