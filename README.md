@@ -1,6 +1,6 @@
 # 🚀 Building and Deploying a Netflix Clone on AWS EKS with GitHub Actions CI/CD
 
-In this blog post, I’ll walk you through how I built and deployed a full-stack **Netflix Clone** using modern DevOps best practices. The project integrates **GitHub Actions** for CI/CD, **SonarCloud** for code quality checks, **Trivy** for Docker image vulnerability scanning, **Docker Hub** for image storage, and **Terraform** for reusable AWS infrastructure — all deployed to a production-grade **AWS EKS cluster** with a managed node group.
+In this project, I’ll walk you through how I built and deployed a full-stack **Netflix Clone** using modern DevOps best practices. The project integrates **GitHub Actions** for CI/CD, **SonarCloud** for code quality checks, **Trivy** for Docker image vulnerability scanning, **Docker Hub** for image storage, and **Terraform** for reusable AWS infrastructure — all deployed to a production-grade **AWS EKS cluster** with a managed node group.
 ---
 
 ## 🎬 Project Overview
@@ -19,54 +19,6 @@ The Netflix Clone is a React-based application that fetches and displays trendin
 
 ## 🗺️ Architecture Overview
 
-
----
-
-## 🛠 CI/CD with GitHub Actions
-
-GitHub Actions automates the build, test, and deployment pipeline every time a new commit is pushed. Here's a simplified version of the workflow:
-
-```yaml
-name: Build and Deploy to EKS
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Run SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        with:
-          projectBaseDir: ./Netflix-Clone
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Build Docker image
-        run: |
-          docker build  /
-           --build-arg VITE_TMDB_API_KEY="${{ secrets.VITE_TMDB_API_KEY }}" /
-           -t netflix-clone:latest /
-           -f ./Netflix-Clone/Dockerfile ./Netflix-Clone
-
-      - name: Scan Docker image with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: netflix-clone:latest
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker tag netflix-clone:latest ${{ secrets.DOCKER_USERNAME }}/netflix-clone:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/netflix-clone:latest
-```
 
 ---
 
@@ -368,7 +320,7 @@ terraform apply
 
 ### 4️⃣ Push Your Code to Trigger GitHub Actions
 
-Once infrastructure is ready and secrets are set, push your code:
+Once infrastructure is ready and secrets are set, push your code. GitHub Actions automates the build, test, and deployment pipeline every time a new commit is pushed. 
 
 ```bash
 git add .
