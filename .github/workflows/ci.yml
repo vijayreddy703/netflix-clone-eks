@@ -11,7 +11,6 @@ jobs:
   build-analyze-scan:
     name: CI Pipeline
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -35,6 +34,7 @@ jobs:
         with:
           image-ref: 'netflix-clone:latest'
           format: 'table'
-          exit-code: '0' # set to 1 to break build on vulnerabilities
+          exit-code: '0'
           ignore-unfixed: true
+
 
